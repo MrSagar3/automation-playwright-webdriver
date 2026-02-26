@@ -45,11 +45,92 @@ test('invalid email', async ({page})=>{
         await page.fill('input[name="email"]',invalidEmails[i])
         await page.fill('textarea[name="message"]',message)
         await page.click('input[type="submit"]')
+        await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
         await expect(page.locator('body')).toContainText('Error: Invalid email address')
+
         await page.goBack()
     }
 })
 
+test('with empty firstname field', async ({page})=>{
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]','')
+    await page.fill('input[name="last_name"]',lastName)
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
+    await expect(page.locator('body')).toContainText('Error: all fields are required')
+})
+
+test('with empty lastname field', async ({page})=>{
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]','')
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
+    await expect(page.locator('body')).toContainText('Error: all fields are required')
+})
+
+test('with empty email field', async ({page})=>{
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]',lastName)
+    await page.fill('input[name="email"]','')
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
+    await expect(page.locator('body')).toContainText('Error: Invalid email address')
+    await expect(page.locator('body')).toContainText('Error: all fields are required')
+})
+
+test('with empty message text field', async ({page})=>{
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]',lastName)
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]','')
+    await page.click('input[type="submit"]')
+    await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
+    await expect(page.locator('body')).toContainText('Error: all fields are required')
+})
 
 
+//test fails below no character limit validation in input fields
+test('maximum charater in firstname input field',async ({page})=>{
+    const firstname='honeybunny'.repeat(3000)
+
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstname)
+    await page.fill('input[name="last_name"]',lastName)
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page.locator('body')).toContainText('Error: Characters exceed maximum limit')   
+})
+
+test('maximum charater in lastinput field',async ({page})=>{
+    const lastname='honeybunny'.repeat(3000)
+
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]',lastname)
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page.locator('body')).toContainText('Error: Characters exceed maximum limit')   
+})
+
+test('maximum charater in message input field',async ({page})=>{
+    const message='honeybunny'.repeat(3000)
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]',lastName)
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="submit"]')
+    await expect(page.locator('body')).toContainText('Error: Characters exceed maximum limit')
+})
 
