@@ -124,13 +124,28 @@ test('maximum charater in lastinput field',async ({page})=>{
 })
 
 test('maximum charater in message input field',async ({page})=>{
-    const message='honeybunny'.repeat(3000)
+    const newmessage='honeybunny'.repeat(3000)
     await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
     await page.fill('input[name="first_name"]',firstName)
     await page.fill('input[name="last_name"]',lastName)
     await page.fill('input[name="email"]',email)
-    await page.fill('textarea[name="message"]',message)
+    await page.fill('textarea[name="message"]',newmessage)
     await page.click('input[type="submit"]')
     await expect(page.locator('body')).toContainText('Error: Characters exceed maximum limit')
+})
+
+
+test('check the reset button', async ({page})=>{
+    await page.goto('https://webdriveruniversity.com/Contact-Us/contactus.html')
+    await page.fill('input[name="first_name"]',firstName)
+    await page.fill('input[name="last_name"]',lastName) 
+    await page.fill('input[name="email"]',email)
+    await page.fill('textarea[name="message"]',message)
+    await page.click('input[type="reset"]')
+    await expect(page.locator('input[name="first_name"]')).toHaveValue('')
+    await expect(page.locator('input[name="last_name"]')).toHaveValue('')
+    await expect(page.locator('input[name="email"]')).toHaveValue('')
+    await expect(page.locator('textarea[name="message"]')).toHaveValue('')
+
 })
 
