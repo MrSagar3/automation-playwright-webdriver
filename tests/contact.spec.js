@@ -9,7 +9,7 @@ test('open contact form', async ({page})=>{
     
     await page.goto('https://webdriveruniversity.com')
     
-    await page.locator()
+    await page.click('text=Contact Us')
 })
 
 test('fill contact form and check success message', async ({page})=>{
@@ -47,7 +47,6 @@ test('invalid email', async ({page})=>{
         await page.click('input[type="submit"]')
         await expect(page).toHaveURL('https://webdriveruniversity.com/Contact-Us/contact_us.php')
         await expect(page.locator('body')).toContainText('Error: Invalid email address')
-
         await page.goBack()
     }
 })
